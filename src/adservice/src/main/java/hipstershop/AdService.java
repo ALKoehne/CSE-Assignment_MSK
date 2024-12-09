@@ -100,7 +100,7 @@ public final class AdService {
           for (int i = 0; i < req.getContextKeysCount(); i++) {
             Collection<Ad> ads = service.getAdsByCategory(req.getContextKeys(i));
             allAds.addAll(ads);
-          }
+          } 
         } else {
           allAds = service.getRandomAds();
         }
