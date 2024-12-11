@@ -260,3 +260,49 @@ message Ad {
     // short advertisement text to display.
     string text = 2;
 }
+// ----------------- Produktbewertungs-Service -----------------
+
+service ProductReviewService {
+    // Bewertet ein Produkt hinzufügen
+    rpc AddReview(AddReviewRequest) returns (AddReviewResponse) {}
+
+    // Holt alle Bewertungen für ein Produkt
+    rpc GetReviews(GetReviewsRequest) returns (GetReviewsResponse) {}
+
+    // Berechnet das durchschnittliche Rating für ein Produkt
+    rpc GetAverageRating(GetAverageRatingRequest) returns (GetAverageRatingResponse) {}
+}
+
+// Eine Anfrage zum Hinzufügen einer Bewertung
+message AddReviewRequest {
+    string prodid = 1;      // Produkt-ID
+    string review = 2;      // Die Textbewertung
+    int64 rating = 3;       // Die numerische Bewertung (z.B. eine Zahl von 1 bis 5)
+}
+
+// Eine Antwort auf das Hinzufügen einer Bewertung
+message AddReviewResponse {
+    bool success = 1;       // Gibt an, ob das Hinzufügen der Bewertung erfolgreich war
+}
+
+// Eine Anfrage, um alle Bewertungen eines Produkts abzurufen
+message GetReviewsRequest {
+    string prodid = 1;      // Produkt-ID
+}
+
+// Eine Antwort, die alle Bewertungen für ein Produkt zurückgibt
+message GetReviewsResponse {
+    repeated string reviews = 1;   // Liste der Textbewertungen
+    repeated int64 ratings = 2;    // Liste der numerischen Bewertungen
+}
+
+// Eine Anfrage zum Abrufen des durchschnittlichen Ratings eines Produkts
+message GetAverageRatingRequest {
+    string prodid = 1;      // Produkt-ID
+}
+
+// Eine Antwort, die das durchschnittliche Rating eines Produkts enthält
+message GetAverageRatingResponse {
+    double average_rating = 1;  // Durchschnittliche Bewertung
+    int32 review_count = 2;     // Anzahl der Bewertungen
+}
