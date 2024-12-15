@@ -20,10 +20,10 @@ public class ReviewService extends ProductReviewServiceGrpc.ProductReviewService
     @Override
     public void addReview(service.ProductReviewServiceOuterClass.AddReviewRequest request,
                           io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.AddReviewResponse> responseObserver) throws IOException, ParseException {
-        responseObserver.onNext(checkResponse(request));
+        responseObserver.onNext(addResponseBuilder(request));
         responseObserver.onCompleted();
     }
-    public ProductReviewServiceOuterClass.AddReviewResponse checkResponse (ProductReviewServiceOuterClass.AddReviewRequest request) throws IOException, ParseException {
+    public ProductReviewServiceOuterClass.AddReviewResponse addResponseBuilder (service.ProductReviewServiceOuterClass.AddReviewRequest request) throws IOException, ParseException {
         addReviewAndRating(request.getProdid(),request.getReview(),request.getRating());
         String [] reviews = getProdReviews(request.getProdid());
         long [] ratings = getProdRatings(request.getProdid());
@@ -37,6 +37,51 @@ public class ReviewService extends ProductReviewServiceGrpc.ProductReviewService
         ProductReviewServiceOuterClass.AddReviewResponse response = ProductReviewServiceOuterClass.AddReviewResponse.newBuilder().setSuccess(success).build();
         return response;
     }
+
+    @Override
+    public void getReviews(service.ProductReviewServiceOuterClass.GetReviewsRequest request,
+                           io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetReviewsResponse> responseObserver) throws IOException, ParseException {
+        responseObserver.onNext(getReviewsResponseBuilder(request));
+        responseObserver.onCompleted();
+    }
+    public ProductReviewServiceOuterClass.GetReviewsResponse getReviewsResponseBuilder (ProductReviewServiceOuterClass.GetReviewsRequest request) throws IOException, ParseException {
+       ProductReviewServiceOuterClass.GetReviewsResponse response = ProductReviewServiceOuterClass.GetReviewsResponse.newBuilder().build();
+        for (int i = 0; i < (getProdReviews(request.getProdid()).length);i++){
+            response.toBuilder().setReviews(i ,getProdReviews(request.getProdid())[i]);
+        }
+        for (int i = 0; i< (getProdRatings(request.getProdid()).length); i++){
+            response.toBuilder().setRatings(i, getProdRatings(request.getProdid())[i]);
+        }
+        return response;
+    }
+    @Override
+    public void getAverageRating(service.ProductReviewServiceOuterClass.GetAverageRatingRequest request,
+                                 io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetAverageRatingResponse> responseObserver) {
+
+    }
+
+
+
+    public long[]  getAvarageProdRating (String prodid) throws IOException, ParseException {
+        Path path = Paths.get("demo.json");
+        Object json = new JSONParser().parse(new FileReader(path.toRealPath().toString() ));
+        JSONArray products =  ((JSONArray) ((JSONObject)(json)).get("productReviews"));
+        JSONArray prodt = new JSONArray();
+        for (int i =0; i<products.toArray().length; i++){
+            if (((JSONObject)(products.get(i))).get("prodid").equals(prodid)){
+                prodt =(JSONArray) ((JSONObject)  ((JSONArray) ((JSONObject)(json)).get("productReviews")).get(i)).get("rating");
+            }
+        }
+        long Avgrating = 0;
+        for (int i =0; i<prodt.toArray().length; i++){
+            Avgrating= Avgrating + (long) prodt.get(i);
+        }
+        return new long[]{Avgrating/prodt.toArray().length,  prodt.toArray().length};
+    }
+
+
+
+
 
 
 

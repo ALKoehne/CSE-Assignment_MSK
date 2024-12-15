@@ -176,7 +176,7 @@ public final class ProductReviewServiceGrpc {
      * </pre>
      */
     default void getReviews(service.ProductReviewServiceOuterClass.GetReviewsRequest request,
-        io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetReviewsResponse> responseObserver) {
+        io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetReviewsResponse> responseObserver) throws IOException, ParseException {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetReviewsMethod(), responseObserver);
     }
 
