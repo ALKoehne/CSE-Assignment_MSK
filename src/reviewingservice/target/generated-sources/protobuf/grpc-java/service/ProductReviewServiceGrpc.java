@@ -186,7 +186,7 @@ public final class ProductReviewServiceGrpc {
      * </pre>
      */
     default void getAverageRating(service.ProductReviewServiceOuterClass.GetAverageRatingRequest request,
-        io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetAverageRatingResponse> responseObserver) {
+        io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetAverageRatingResponse> responseObserver) throws IOException, ParseException {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetAverageRatingMethod(), responseObserver);
     }
   }

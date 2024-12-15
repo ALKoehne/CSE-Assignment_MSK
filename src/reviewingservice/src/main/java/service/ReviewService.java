@@ -56,10 +56,15 @@ public class ReviewService extends ProductReviewServiceGrpc.ProductReviewService
     }
     @Override
     public void getAverageRating(service.ProductReviewServiceOuterClass.GetAverageRatingRequest request,
-                                 io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetAverageRatingResponse> responseObserver) {
-
+                                 io.grpc.stub.StreamObserver<service.ProductReviewServiceOuterClass.GetAverageRatingResponse> responseObserver) throws IOException, ParseException {
+        responseObserver.onNext(getAverageRatingResponseBuilder(request));
+        responseObserver.onCompleted();
     }
 
+    public ProductReviewServiceOuterClass.GetAverageRatingResponse getAverageRatingResponseBuilder (ProductReviewServiceOuterClass.GetAverageRatingRequest request) throws IOException, ParseException {
+        ProductReviewServiceOuterClass.GetAverageRatingResponse response = ProductReviewServiceOuterClass.GetAverageRatingResponse.newBuilder().setAverageRating(getAvarageProdRating(request.getProdid())[0]).setReviewCount((int) getAvarageProdRating(request.getProdid())[1]).build();
+        return response;
+    }
 
 
     public long[]  getAvarageProdRating (String prodid) throws IOException, ParseException {
@@ -78,20 +83,6 @@ public class ReviewService extends ProductReviewServiceGrpc.ProductReviewService
         }
         return new long[]{Avgrating/prodt.toArray().length,  prodt.toArray().length};
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private void addReviewAndRating(String prodID, String review, long rating) throws IOException, ParseException {
         Path path = Paths.get("demo.json");
