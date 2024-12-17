@@ -32,10 +32,15 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
+	context "context"
+
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
 	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/money"
 	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/validator"
+	grpc "google.golang.org/grpc"
 )
+
+const _ = grpc.SupportPackageIsVersion9
 
 type platformDetails struct {
 	css      string
@@ -194,6 +199,12 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 			fmt.Println("Failed to obtain product's packaging info:", err)
 		}
 	}
+	var Test string = "totaler Müll"
+
+	rating, err := fe.GetReviews(sessionID(r), []string{id})
+	if err != nil {
+		log.WithField("error", err).Warn("failed to get product recommendations")
+	}
 
 	if err := templates.ExecuteTemplate(w, "product", injectCommonTemplateData(r, map[string]interface{}{
 		"ad":              fe.chooseAd(r.Context(), p.Categories, log),
@@ -202,6 +213,8 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 		"product":         product,
 		"recommendations": recommendations,
 		"cart_size":       cartSize(cart),
+		"Test":            Test,
+		"Rating":          rating,
 		"packagingInfo":   packagingInfo,
 	})); err != nil {
 		log.Println(err)
@@ -232,7 +245,7 @@ func (fe *frontendServer) addToCartHandler(w http.ResponseWriter, r *http.Reques
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to add to cart"), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("location", baseUrl + "/cart")
+	w.Header().Set("location", baseUrl+"/cart")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -244,7 +257,7 @@ func (fe *frontendServer) emptyCartHandler(w http.ResponseWriter, r *http.Reques
 		renderHTTPError(log, r, w, errors.Wrap(err, "failed to empty cart"), http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("location", baseUrl + "/")
+	w.Header().Set("location", baseUrl+"/")
 	w.WriteHeader(http.StatusFound)
 }
 
@@ -423,7 +436,7 @@ func (fe *frontendServer) logoutHandler(w http.ResponseWriter, r *http.Request) 
 		c.MaxAge = -1
 		http.SetCookie(w, c)
 	}
-	w.Header().Set("Location", baseUrl + "/")
+	w.Header().Set("Location", baseUrl+"/")
 	w.WriteHeader(http.StatusFound)
 }
 

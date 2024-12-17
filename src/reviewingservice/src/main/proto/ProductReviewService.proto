@@ -1,7 +1,9 @@
 syntax = "proto3";
-package  service;
-// ----------------- Produktbewertungs-Service -----------------
 
+
+option go_package ="microservices-demo/src/reviewingservice/target/generated-sources/protobuf/java/service/ProductReviewServiceOuterClass.java";
+// ----------------- Produktbewertungs-Service -----------------
+package service; //warum Service und nicht hipstershop
 service ProductReviewService {
   // Bewertet ein Produkt hinzufügen
   rpc AddReview(AddReviewRequest) returns (AddReviewResponse) {}
@@ -46,3 +48,5 @@ message GetAverageRatingResponse {
   double average_rating = 1;  // Durchschnittliche Bewertung
   int32 review_count = 2;     // Anzahl der Bewertungen
 }
+
+message Empty {}
