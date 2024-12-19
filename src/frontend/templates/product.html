@@ -71,11 +71,21 @@
         </div>
       </div>
     </div>
-  </div>
-  <div>
-    <h1>{{$.Test}}</h1>
-    <p>{{$.Test}}/5</p>
-    <p>{{$.Test}}</p>
+    <div>
+      <!-- Hier wird durch die Ratings & Reviews durch iteriert -->
+      <h1>Product Ratings</h1>
+      <h3>
+        {{range $.Review.Ratings}}
+          <h3>{{ .}}</h3>
+        {{end}}
+      </h3>
+      <h1>Product Reviews</h1>
+      <h3>
+        {{range $.Review.Reviews}}
+          <h3>{{ .}}</h3>
+        {{end}}
+      </h3>
+    </div>
   </div>
   <div>
     {{ if $.recommendations}}

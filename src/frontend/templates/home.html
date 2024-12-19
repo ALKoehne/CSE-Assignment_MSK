@@ -52,6 +52,8 @@
             <div>
               <div class="hot-product-card-name">{{ .Item.Name }}</div>
               <div class="hot-product-card-price">{{ renderMoney .Price }}</div>
+              <h1>{{ $.products.Review.avgRating }}</h1> 
+              <!-- Das müssen wir nochmal testen -->
             </div>
           </div>
           {{ end }}

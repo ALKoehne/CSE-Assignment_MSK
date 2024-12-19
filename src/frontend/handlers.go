@@ -32,11 +32,12 @@ import (
 	"github.com/pkg/errors"
 	"github.com/sirupsen/logrus"
 
-	context "context"
-
 	pb "github.com/GoogleCloudPlatform/microservices-demo/src/frontend/genproto"
 	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/money"
 	"github.com/GoogleCloudPlatform/microservices-demo/src/frontend/validator"
+
+	//Kommentare hinzufügen
+
 	grpc "google.golang.org/grpc"
 )
 
@@ -201,9 +202,20 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 	}
 	var Test string = "totaler Müll"
 
-	rating, err := fe.GetReviews(sessionID(r), []string{id})
-	if err != nil {
-		log.WithField("error", err).Warn("failed to get product recommendations")
+	type reviewInfo struct {
+		Reviews   []string
+		Ratings   []int64
+		avgRating float32
+		prodId    string
+	}
+	// struct included all the relevant information for one producte regarding its reviews
+
+	//dummy data for easy front.end representation
+	review := reviewInfo{
+		Reviews:   []string{"Gutes Produkt", "Sehr zufrieden", "Könnte besser sein"},
+		Ratings:   []int64{5, 4, 3, 3},
+		avgRating: 3.7,
+		prodId:    "123-ABC",
 	}
 
 	if err := templates.ExecuteTemplate(w, "product", injectCommonTemplateData(r, map[string]interface{}{
@@ -214,7 +226,7 @@ func (fe *frontendServer) productHandler(w http.ResponseWriter, r *http.Request)
 		"recommendations": recommendations,
 		"cart_size":       cartSize(cart),
 		"Test":            Test,
-		"Rating":          rating,
+		"Review":          review, //including Review in Products to access it in frontend
 		"packagingInfo":   packagingInfo,
 	})); err != nil {
 		log.Println(err)
