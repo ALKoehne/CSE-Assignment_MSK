@@ -3,50 +3,48 @@ syntax = "proto3";
 
 option go_package ="microservices-demo/src/reviewingservice/target/generated-sources/protobuf/java/service/ProductReviewServiceOuterClass.java";
 // ----------------- Produktbewertungs-Service -----------------
-package service; //warum Service und nicht hipstershop
+package service; 
 service ProductReviewService {
-  // Bewertet ein Produkt hinzufügen
+  // add a review
   rpc AddReview(AddReviewRequest) returns (AddReviewResponse) {}
-
-  // Holt alle Bewertungen für ein Produkt
+  // get a review 
   rpc GetReviews(GetReviewsRequest) returns (GetReviewsResponse) {}
-
-  // Berechnet das durchschnittliche Rating für ein Produkt
+  // get an average rating
   rpc GetAverageRating(GetAverageRatingRequest) returns (GetAverageRatingResponse) {}
 }
 
 // Eine Anfrage zum Hinzufügen einer Bewertung
 message AddReviewRequest {
-  string prodid = 1;      // Produkt-ID
-  string review = 2;      // Die Textbewertung
-  int64 rating = 3;       // Die numerische Bewertung (z.B. eine Zahl von 1 bis 5)
+  string prodid = 1;         // product.ID
+  string review = 2;        // review for a product
+  int64 rating = 3;         // rating for a product 
 }
 
 // Eine Antwort auf das Hinzufügen einer Bewertung
 message AddReviewResponse {
-  bool success = 1;       // Gibt an, ob das Hinzufügen der Bewertung erfolgreich war
+  bool success = 1;        // if a add was successfull 
 }
 
 // Eine Anfrage, um alle Bewertungen eines Produkts abzurufen
 message GetReviewsRequest {
-  string prodid = 1;      // Produkt-ID
+  string prodid = 1;            // product.id
 }
 
 // Eine Antwort, die alle Bewertungen für ein Produkt zurückgibt
 message GetReviewsResponse {
-  repeated string reviews = 1;   // Liste der Textbewertungen
-  repeated int64 ratings = 2;    // Liste der numerischen Bewertungen
+  repeated string reviews = 1;   // List of reviews
+  repeated int64 ratings = 2;    // Liste dthe rating
 }
 
 // Eine Anfrage zum Abrufen des durchschnittlichen Ratings eines Produkts
 message GetAverageRatingRequest {
-  string prodid = 1;      // Produkt-ID
+  string prodid = 1;      // product-ID
 }
 
 // Eine Antwort, die das durchschnittliche Rating eines Produkts enthält
 message GetAverageRatingResponse {
-  double average_rating = 1;  // Durchschnittliche Bewertung
-  int32 review_count = 2;     // Anzahl der Bewertungen
+  double average_rating = 1;  // Average rating
+  int32 review_count = 2;     // Number of ratings
 }
 
 message Empty {}
